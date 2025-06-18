@@ -1,7 +1,7 @@
 JoLA: Joint Localization and Activation Editing for Low-Resource Fine-Tuning
 ===
 
-Code for the paper "JoLA: Joint Localization and Activation Editing for Low-Resource Fine-Tuning"
+Code for the paper "JoLA: Joint Localization and Activation Editing for Low-Resource Fine-Tuning (ICML 2025)"
 
 Paper: http://arxiv.org/abs/2502.01179
 
