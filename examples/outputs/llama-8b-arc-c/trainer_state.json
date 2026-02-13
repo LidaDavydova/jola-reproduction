@@ -1,6 +1,6 @@
 {
   "best_metric": 0.5483201742172241,
-  "best_model_checkpoint": "./output-llamma-8b/checkpoint-25",
+  "best_model_checkpoint": "./outputs/llama-8b-arc-c/checkpoint-25",
   "epoch": 1.0,
   "eval_steps": 500,
   "global_step": 25,
