@@ -1,6 +1,8 @@
 Reproducibility issues
 ===
 
+Here is the minimal changes made to reproduce results of use Llama-3.1-8b-Instruct on ARC-c dataset, as presented at example code.
+
 #### Dataset
 Commonsense Reasoning (ARC-c)
 [Same Link](https://github.com/AGI-Edgerunners/LLM-Adapters/tree/main/dataset/ARC-Challenge)
@@ -23,7 +25,9 @@ python run_jola.py
 python eval_model.py
 ```
 
-Files about train process:
-(examples/outputs/llama-8b-arc-c)[https://github.com/LidaDavydova/jola-reproduction/tree/main/examples/outputs/llama-8b-arc-c]
+Files about train/test process:
+[examples/outputs/llama-8b-arc-c](https://github.com/LidaDavydova/jola-reproduction/tree/main/examples/outputs/llama-8b-arc-c)
 
 Yes, an early stopping was considered the best control point even after 1 epoch, but I tried several times to run train with different train_data_size (200-1000) and a different model such as llama-3b. And the training process usually ended after a maximum of 6 epochs.
+
+I use gate_scheduler: "expon" as most stable in the article, did not tried here experiments with lr or gate_scheduler.
