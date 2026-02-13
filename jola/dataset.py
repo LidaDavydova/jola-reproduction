@@ -29,8 +29,9 @@ class JoLADataset:
             data_dir = os.path.join(self.data_path, f'{split}.json')
             raw_data = []
             with open(data_dir, 'r') as f:
-                for line in f.readlines():
-                    raw_data.append(json.loads(line.strip()))
+                # for line in f.readlines():
+                #     raw_data.append(json.loads(line.strip()))
+                raw_data = json.load(f)
             ### Only sample part of the training data if train_size !=0
             if self.train_size!=0 and split=='train':
                 if len(raw_data) >= self.train_size:
@@ -39,6 +40,7 @@ class JoLADataset:
                 if len(raw_data) >= self.train_size:
                     raw_data = random.sample(raw_data, self.train_size)
             if split == "test":
+                raw_data = random.sample(raw_data, 100)
                 formatted_data = self.format_prompt(raw_data, append_label=False)
             else:
                 formatted_data = self.format_prompt(raw_data, append_label=True)

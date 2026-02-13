@@ -33,8 +33,9 @@ if jola_tokenizer.pad_token is None:
 data_collator = make_data_collator(tokenizer=jola_tokenizer)
 
 # dataset setting
-jola_dataset = JoLADataset(data_path=jola_config["data_config"]["data_path"])
+jola_dataset = JoLADataset(data_path=jola_config["data_config"]["data_path"], train_size=jola_config["data_config"]["train_size"])
 jola_data = jola_dataset.data_from_file()
+print(jola_data)
 
 # early stop according to the performance from validation set
 early_stopping_callback = EarlyStoppingCallback(
