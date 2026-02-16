@@ -1,6 +1,11 @@
 Reproducibility issues
 ===
 
+
+### The problem
+The model does not show any improvement in validation: despite using the JoLA parameters from the article, the training loss decreases and the validation loss increases, indicating overfitting or non-compliance of the training configuration with the conditions described in the original paper.
+
+===
 Here is the minimal changes made to reproduce results of use Llama-3.1-8b-Instruct on ARC-c dataset, as presented at example code.
 
 #### Dataset
