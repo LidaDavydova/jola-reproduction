@@ -30,4 +30,22 @@ Files about train/test process:
 
 Yes, an early stopping was considered the best control point even after 1 epoch, but I tried several times to run train with different train_data_size (200-1000) and a different model such as llama-3b. And the training process usually ended after a maximum of 6 epochs.
 
+lr=0.005
+
 I use gate_scheduler: "expon" as most stable in the article, did not tried here experiments with lr or gate_scheduler.
+
+### One more experiment, changed lr=0.0005 as it's in the article, other parameters are the same also.
+
+Did not use EaryStopping now to track train/val more
+
+1) with train_size = 200 and val_size = 200
+![alt text](images/train1.png)
+
+2) with train_size = 1000 and val_size ~ 500
+![alt text](images/train2.png)
+
+in text format:
+
+* [examples/outputs/training_proc1.txt](https://github.com/LidaDavydova/jola-reproduction/tree/main/examples/outputs/training_proc1.txt)
+
+* [examples/outputs/training_proc2.txt](https://github.com/LidaDavydova/jola-reproduction/tree/main/examples/outputs/training_proc2.txt)
