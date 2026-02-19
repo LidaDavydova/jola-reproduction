@@ -1,0 +1,5 @@
+torch==2.8.0
+transformers==4.45.1
+trl==0.8.1
+datasets==4.5.0
+clearml[s3]
