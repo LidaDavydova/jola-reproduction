@@ -11,6 +11,11 @@ task = Task.init(
     task_name="jola_training"
 )
 
+
+from huggingface_hub import login
+
+login(token=os.environ["HF_TOKEN"])
+
 print("Cuda: ", torch.cuda.is_available())
 
 ## if you have already install jola through pip, you can directly import them
