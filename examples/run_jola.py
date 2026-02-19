@@ -1,111 +1,89 @@
+from transformers import AutoTokenizer, TrainingArguments, EarlyStoppingCallback
+
 from clearml import Task
 
-import sys
-
-import os
-import torch
+import sys, os, torch
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from utils import foo
-import time
+from jola import JoLAConfig, JoLAModel, JoLATrainer, JoLADataset, make_data_collator
 
-if __name__ == "__main__":
-    task = Task.init(
-        project_name="JoLA_for_alignment", 
-        task_name="jola-example",         
-    )
+task = Task.init(
+    project_name="pershin_scaling_llm_alignment/JoLA_for_alignment",
+    task_name="jola_training"
+)
 
-files = [f for f in os.listdir(".") if os.path.isfile(f)]
-print(files)
-
-# Проверяем наличие Cuda
 print("Cuda: ", torch.cuda.is_available())
 
-# Выводим произвольный лог с задержкой
-DELAY = 10
-for _ in range(DELAY):
-    print("Hello World!", foo(_))
-    time.sleep(1)
-    sys.stdout.flush()
-
-
-# from transformers import AutoTokenizer, TrainingArguments, EarlyStoppingCallback
-
-# from clearml import Task
-
-# import sys, os, torch
-# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+## if you have already install jola through pip, you can directly import them
 # from jola import JoLAConfig, JoLAModel, JoLATrainer, JoLADataset, make_data_collator
 
-# task = Task.init(
-#     project_name="pershin_scaling_llm_alignment/JoLA_for_alignment",
-#     task_name="jola_training",
-#     reuse_last_task_id=False
-# )
+# set the jola config through a yamal file, please use your own yamal by setting 'default=False' and specify a 'yaml' file
+jola_config = JoLAConfig.get_jola_config(default=True)
 
-# ## if you have already install jola through pip, you can directly import them
-# # from jola import JoLAConfig, JoLAModel, JoLATrainer, JoLADataset, make_data_collator
+task.connect(jola_config)
 
-# # set the jola config through a yamal file, please use your own yamal by setting 'default=False' and specify a 'yaml' file
-# jola_config = JoLAConfig.get_jola_config(default=True)
+jola_tokenizer = AutoTokenizer.from_pretrained(**jola_config["model_config"])
 
-# task.connect(jola_config)
+# Use right padding for training
+jola_tokenizer.padding_side = 'right'
 
-# jola_tokenizer = AutoTokenizer.from_pretrained(**jola_config["model_config"])
+# Load models
+jola_model = JoLAModel.jola_from_pretrained(**jola_config["model_config"])
 
-# # Use right padding for training
-# jola_tokenizer.padding_side = 'right'
+# unfreeze jola parameters
+jola_model.unfreeze_jola_params()
 
-# # Load models
-# jola_model = JoLAModel.jola_from_pretrained(**jola_config["model_config"])
+# set in training mode
+jola_model.model.train()
 
-# # unfreeze jola parameters
-# jola_model.unfreeze_jola_params()
+# Define padding
+if jola_tokenizer.pad_token is None:
+    jola_tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+    jola_model.resize_token_embeddings(jola_model.config.vocab_size + 1)
 
-# # set in training mode
-# jola_model.model.train()
+# data setting, data loader
+data_collator = make_data_collator(tokenizer=jola_tokenizer)
 
-# # Define padding
-# if jola_tokenizer.pad_token is None:
-#     jola_tokenizer.add_special_tokens({'pad_token': '[PAD]'})
-#     jola_model.resize_token_embeddings(jola_model.config.vocab_size + 1)
+# dataset setting
+jola_dataset = JoLADataset(data_path=jola_config["data_config"]["data_path"], train_size=jola_config["data_config"]["train_size"])
+jola_data = jola_dataset.data_from_file()
+print(jola_data)
 
-# # data setting, data loader
-# data_collator = make_data_collator(tokenizer=jola_tokenizer)
+# early stop according to the performance from validation set
+early_stopping_callback = EarlyStoppingCallback(
+    early_stopping_patience=2,
+    early_stopping_threshold=0.0
+)
 
-# # dataset setting
-# jola_dataset = JoLADataset(data_path=jola_config["data_config"]["data_path"], train_size=jola_config["data_config"]["train_size"])
-# jola_data = jola_dataset.data_from_file()
-# print(jola_data)
+training_args = TrainingArguments(**jola_config["training_config"])
 
-# # early stop according to the performance from validation set
-# early_stopping_callback = EarlyStoppingCallback(
-#     early_stopping_patience=2,
-#     early_stopping_threshold=0.0
-# )
+# trainer
+jola_trainer = JoLATrainer(
+    jola_model,
+    train_dataset=jola_data['train'],
+    eval_dataset = jola_data['valid'],
+    tokenizer=jola_tokenizer,
+    data_collator = data_collator,
+    args=training_args,
+    callbacks=[early_stopping_callback],
+    gate_scheduler=jola_config["jola_config"]["gate_scheduler"]
+)
 
-# training_args = TrainingArguments(**jola_config["training_config"])
+torch.autograd.set_detect_anomaly(True)
 
-# # trainer
-# jola_trainer = JoLATrainer(
-#     jola_model,
-#     train_dataset=jola_data['train'],
-#     eval_dataset = jola_data['valid'],
-#     tokenizer=jola_tokenizer,
-#     data_collator = data_collator,
-#     args=training_args,
-#     callbacks=[early_stopping_callback],
-#     gate_scheduler=jola_config["jola_config"]["gate_scheduler"]
-# )
+# set gate schedule
+if not jola_config["jola_config"]["gate_scheduler"]:
+    jola_trainer.gated_lambda = jola_config['training_config']["gate_lambda"]
 
-# torch.autograd.set_detect_anomaly(True)
+jola_trainer.train()
 
-# # set gate schedule
-# if not jola_config["jola_config"]["gate_scheduler"]:
-#     jola_trainer.gated_lambda = jola_config['training_config']["gate_lambda"]
+trainer.save_model("./final_model")
 
-# jola_trainer.train()
+task.upload_artifact(
+            name=jola_config["training_config"]['output_dir'],
+            artifact_object=jola_config["training_config"]['output_dir']
+        )
 
-# task.close()
+task.close()
 
-# # do evaluation ** double check
-# # jola_trainer.test(fname=args.output_file_name, task=args.task, subtask=args.subtask, eval_dataset=jola_data['test'],model_name = args.base_model_name)
+# do evaluation ** double check
+# jola_trainer.test(fname=args.output_file_name, task=args.task, subtask=args.subtask, eval_dataset=jola_data['test'],model_name = args.base_model_name)

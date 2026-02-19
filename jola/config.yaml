@@ -1,7 +1,7 @@
 model_config:
   pretrained_model_name_or_path: "meta-llama/Llama-3.1-8B-Instruct"
   device: "cuda"
-  cache_dir: "/repo/jola/.cache"
+  cache_dir: ".cache"
   applied_module: 'attention'
   base_model_name: 'llama3.1_8B_chat'
 
@@ -25,9 +25,9 @@ training_config:
   output_dir: './outputs/llama-8b-arc-c'
 
 data_config:
-  train_size: 1000
+  train_size: 200
   task_name: "common_reason"
-  data_path: "/repo/jola_old/dataset/data_with_instruct/commonsense/ARC-c"
+  data_path: "../dataset/data_with_instruct/commonsense/ARC-c"
 
 jola_config:
   gate_lambda: 0.00004
