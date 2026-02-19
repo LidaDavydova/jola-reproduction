@@ -4,4 +4,4 @@ trl==0.8.1
 datasets>=4.5.0
 clearml[s3]
 rich>=13.0.0
-huggingface_hub
+huggingface-hub>=0.23.2,<1.0
