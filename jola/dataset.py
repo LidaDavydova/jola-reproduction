@@ -28,8 +28,8 @@ class JoLADataset:
         data_dir = os.path.join(self.data_path, f'train.json')
 
         raw_data = []
-            with open(data_dir, 'r') as f:
-                raw_data = json.load(f)
+        with open(data_dir, 'r') as f:
+            raw_data = json.load(f)
         self.jola_datasets['train'] = random.sample(raw_data, self.train_size)
         self.jola_datasets['valid'] = self.jola_datasets['train']
         self.jola_datasets['test'] = random.sample(self.jola_datasets['train'], 100)
