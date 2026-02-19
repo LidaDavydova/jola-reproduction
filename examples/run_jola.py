@@ -81,10 +81,10 @@ if not jola_config["jola_config"]["gate_scheduler"]:
 
 jola_trainer.train()
 
-trainer.save_model("./final_model")
+jola_trainer.save_model(jola_config["training_config"]['output_dir'])
 
 task.upload_artifact(
-            name=jola_config["training_config"]['output_dir'],
+            name='final_model',
             artifact_object=jola_config["training_config"]['output_dir']
         )
 
