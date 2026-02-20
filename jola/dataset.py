@@ -34,7 +34,13 @@ class JoLADataset:
         data = random.sample(raw_data, self.train_size)
         self.jola_datasets['train'] = self.format_prompt(data, append_label=True)
         self.jola_datasets['valid'] = self.jola_datasets['train']
-        data = random.sample(data, 20)
+
+        raw_data = []
+        data_dir = os.path.join(self.data_path, f'test.json')
+        with open(data_dir, 'r') as f:
+            raw_data = json.load(f)
+
+        data = random.sample(raw_data, 100)
         self.jola_datasets['test'] = self.format_prompt(data, append_label=False)
 
         # for split in ["train", "valid", "test"]:
