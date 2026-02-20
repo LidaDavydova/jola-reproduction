@@ -2,7 +2,7 @@ import torch
 from transformers import AutoTokenizer
 import sys, os
 
-from clearml import Task
+from clearml import Task, StorageManager
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from jola import JoLAConfig, JoLAModel, JoLADataset, evaluate_common_reason
