@@ -11,8 +11,6 @@ task = Task.init(
     task_name="jola_training"
 )
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
-
 from huggingface_hub import login
 
 login(token=os.environ["HF_TOKEN"])
