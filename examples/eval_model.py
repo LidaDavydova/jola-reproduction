@@ -25,7 +25,7 @@ checkpoint_path = StorageManager.get_local_copy(
 
 print("Downloaded to:", checkpoint_path)
 
-for root, dirs, files in os.walk(local_path):
+for root, dirs, files in os.walk(checkpoint_path):
     # Print the current directory
     print("Directory:", root)
     # Print subdirectories
