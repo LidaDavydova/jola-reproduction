@@ -11,6 +11,7 @@ task = Task.init(
     task_name="jola_training"
 )
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 from huggingface_hub import login
 
@@ -84,7 +85,7 @@ jola_trainer.train()
 jola_trainer.save_model(jola_config["training_config"]['output_dir'])
 
 task.upload_artifact(
-            name='final_model',
+            name='final_model_train_size_1000',
             artifact_object=jola_config["training_config"]['output_dir']
         )
 
