@@ -16,9 +16,10 @@ task = Task.init(
 #  load config
 jola_config = JoLAConfig.get_jola_config(default=True)
 
+base_s3 = 's3://api.blackhole2.ai.innopolis.university:443/pershin-scaling-llm-alignment'
 
 checkpoint_path = StorageManager.get_local_copy(
-    remote_url="s3://pershin-scaling-llm-alignment/pershin_scaling_llm_alignment/JoLA_for_alignment/clearml-example-cu129.ca8d2f4c037841a2a19223356b5acecd/artifacts/final_model/llama-8b-arc-c.zip",
+    remote_url=base_s3+"/pershin_scaling_llm_alignment/JoLA_for_alignment/clearml-example-cu129.ca8d2f4c037841a2a19223356b5acecd/artifacts/final_model/llama-8b-arc-c.zip",
     extract_archive=True
 )
 
