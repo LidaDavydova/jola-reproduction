@@ -82,7 +82,7 @@ def evaluate_single(model, tokenizer, instructions, input=None, temperature=0.1,
         )
     s = generation_output.sequences
     outputs = tokenizer.batch_decode(s, skip_special_tokens=True)
-    print(o.split("### Response:")[1].strip())
+    print([o.split("### Response:")[1].strip() for o in outputs])
     outputs = [o.split("### Response:")[1].strip().split("\n")[0] for o in outputs]
     return outputs
 
