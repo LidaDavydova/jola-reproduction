@@ -4,7 +4,7 @@ import json
 import re
 import copy
 from tqdm import tqdm
-import gem_metrics
+# import gem_metrics
 
 from transformers import GenerationConfig
 
