@@ -35,8 +35,6 @@ for root, dirs, files in os.walk(checkpoint_path):
     for f in files:
         print("  File   :", f)
 
-checkpoint_path = checkpoint_path + '/llama-8b-arc-c'
-
 #  load tokenizer
 tokenizer = AutoTokenizer.from_pretrained(checkpoint_path)
 tokenizer.padding_side = "left"
