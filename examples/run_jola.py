@@ -11,7 +11,7 @@ task = Task.init(
     task_name="jola_training"
 )
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 from huggingface_hub import login
 
