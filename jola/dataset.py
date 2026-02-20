@@ -34,7 +34,6 @@ class JoLADataset:
         data = random.sample(raw_data, self.train_size)
         self.jola_datasets['train'] = self.format_prompt(data, append_label=True)
         self.jola_datasets['valid'] = self.jola_datasets['train']
-        data = random.sample(data, 100)
         self.jola_datasets['test'] = self.format_prompt(data, append_label=False)
 
         # for split in ["train", "valid", "test"]:
