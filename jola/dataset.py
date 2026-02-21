@@ -33,7 +33,8 @@ class JoLADataset:
 
         data = random.sample(raw_data, self.train_size)
         self.jola_datasets['train'] = self.format_prompt(data, append_label=True)
-        self.jola_datasets['valid'] = self.jola_datasets['train']
+        data_val = random.sample(data, 50)
+        self.jola_datasets['valid'] = self.format_prompt(data_val, append_label=True)
 
         raw_data = []
         data_dir = os.path.join(self.data_path, f'test.json')
