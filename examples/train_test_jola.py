@@ -44,7 +44,7 @@ tokenizer.padding_side = "right"
 # =========================
 # Model (training version)
 # =========================
-model = JoLAModel_qwen.jola_from_pretrained(**jola_config["model_config"])
+model = JoLAModel_llama.jola_from_pretrained(**jola_config["model_config"])
 model.unfreeze_jola_params()
 model.model.train()
 
@@ -100,7 +100,7 @@ trainer.save_model(output_dir)
 # =========================
 torch.cuda.empty_cache()
 
-model = JoLAModel_qwen.jola_from_pretrained(
+model = JoLAModel_llama.jola_from_pretrained(
     pretrained_model_name_or_path=output_dir,
     torch_dtype=torch.float32,
     cache_dir='.cache',
