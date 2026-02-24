@@ -103,6 +103,7 @@ torch.cuda.empty_cache()
 model = JoLAModel_qwen.jola_from_pretrained(
     pretrained_model_name_or_path=output_dir,
     torch_dtype=torch.float32,
+    cache_dir='.cache',
     device_map="auto"
 )
 
