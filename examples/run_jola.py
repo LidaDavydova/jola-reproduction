@@ -4,7 +4,7 @@ from clearml import Task
 
 import sys, os, torch
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from jola import JoLAConfig, JoLAModel, JoLATrainer, JoLADataset, make_data_collator
+from jola import JoLAConfig, JoLAModel_llama, JoLAModel_qwen, JoLATrainer, JoLADataset, make_data_collator
 
 task = Task.init(
     project_name="pershin_scaling_llm_alignment/JoLA_for_alignment",
@@ -31,7 +31,7 @@ jola_tokenizer = AutoTokenizer.from_pretrained(**jola_config["model_config"])
 jola_tokenizer.padding_side = 'right'
 
 # Load models
-jola_model = JoLAModel.jola_from_pretrained(**jola_config["model_config"])
+jola_model = JoLAModel_qwen.jola_from_pretrained(**jola_config["model_config"])
 
 # unfreeze jola parameters
 jola_model.unfreeze_jola_params()
