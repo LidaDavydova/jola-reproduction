@@ -25,45 +25,45 @@ class JoLADataset:
     
 
     def data_from_file(self):
-        data_dir = os.path.join(self.data_path, f'train.json')
+        # data_dir = os.path.join(self.data_path, f'train.json')
 
-        raw_data = []
-        with open(data_dir, 'r') as f:
-            raw_data = json.load(f)
+        # raw_data = []
+        # with open(data_dir, 'r') as f:
+        #     raw_data = json.load(f)
 
-        data = random.sample(raw_data, self.train_size)
-        self.jola_datasets['train'] = self.format_prompt(data, append_label=True)
-        data_val = random.sample(data, 50)
-        self.jola_datasets['valid'] = self.format_prompt(data_val, append_label=True)
+        # data = random.sample(raw_data, self.train_size)
+        # self.jola_datasets['train'] = self.format_prompt(data, append_label=True)
+        # data_val = random.sample(data, 50)
+        # self.jola_datasets['valid'] = self.format_prompt(data_val, append_label=True)
 
-        raw_data = []
-        data_dir = os.path.join(self.data_path, f'test.json')
-        with open(data_dir, 'r') as f:
-            raw_data = json.load(f)
+        # raw_data = []
+        # data_dir = os.path.join(self.data_path, f'test.json')
+        # with open(data_dir, 'r') as f:
+        #     raw_data = json.load(f)
 
-        data = random.sample(raw_data, 100)
-        self.jola_datasets['test'] = self.format_prompt(data, append_label=False)
+        # data = random.sample(raw_data, 100)
+        # self.jola_datasets['test'] = self.format_prompt(data, append_label=False)
 
-        # for split in ["train", "valid", "test"]:
-        #     data_dir = os.path.join(self.data_path, f'{split}.json')
-        #     raw_data = []
-        #     with open(data_dir, 'r') as f:
-        #         # for line in f.readlines():
-        #         #     raw_data.append(json.loads(line.strip()))
-        #         raw_data = json.load(f)
-        #     ### Only sample part of the training data if train_size !=0
-        #     if self.train_size!=0 and split=='train':
-        #         if len(raw_data) >= self.train_size:
-        #             raw_data = random.sample(raw_data, self.train_size)
-        #     if self.train_size!=0 and split=='valid':
-        #         if len(raw_data) >= self.train_size:
-        #             raw_data = random.sample(raw_data, self.train_size)
-        #     if split == "test":
-        #         raw_data = random.sample(raw_data, 100)
-        #         formatted_data = self.format_prompt(raw_data, append_label=False)
-        #     else:
-        #         formatted_data = self.format_prompt(raw_data, append_label=True)
-        #     self.jola_datasets[split] = formatted_data 
+        for split in ["train", "valid", "test"]:
+            data_dir = os.path.join(self.data_path, f'{split}.json')
+            raw_data = []
+            with open(data_dir, 'r') as f:
+                # for line in f.readlines():
+                #     raw_data.append(json.loads(line.strip()))
+                raw_data = json.load(f)
+            ### Only sample part of the training data if train_size !=0
+            if self.train_size!=0 and split=='train':
+                if len(raw_data) >= self.train_size:
+                    raw_data = random.sample(raw_data, self.train_size)
+            if self.train_size!=0 and split=='valid':
+                if len(raw_data) >= self.train_size:
+                    raw_data = random.sample(raw_data, self.train_size)
+            if split == "test":
+                raw_data = random.sample(raw_data, 100)
+                formatted_data = self.format_prompt(raw_data, append_label=False)
+            else:
+                formatted_data = self.format_prompt(raw_data, append_label=True)
+            self.jola_datasets[split] = formatted_data 
         return self.jola_datasets
     
     def generate_prompt(self, instruction, input=None):

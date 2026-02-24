@@ -1,9 +1,9 @@
 model_config:
-  pretrained_model_name_or_path: "Qwen/Qwen2.5-3B-Instruct"
+  pretrained_model_name_or_path: "meta-llama/Llama-3.1-8B-Instruct"
   device: "cuda"
   cache_dir: ".cache"
   applied_module: 'attention'
-  base_model_name: 'qwen2.5_3B_chat'
+  base_model_name: 'llama-3.1-8B_chat'
 
 training_config:
   learning_rate: 0.0005
@@ -22,7 +22,7 @@ training_config:
   do_train: True
   do_eval: True
   bf16: False
-  output_dir: './outputs/qwen3b-arc-c'
+  output_dir: './outputs/llama8b-arc-c'
 
 data_config:
   train_size: 200
