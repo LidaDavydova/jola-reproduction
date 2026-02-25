@@ -5,7 +5,7 @@ import sys, os
 from clearml import Task, StorageManager
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from jola import JoLAConfig, JoLAModel, JoLADataset, evaluate_common_reason
+from jola import JoLAConfig, JoLAModel_llama, JoLADataset, evaluate_common_reason
 
 task = Task.init(
     project_name="pershin_scaling_llm_alignment/JoLA_for_alignment",
@@ -40,7 +40,7 @@ tokenizer = AutoTokenizer.from_pretrained(checkpoint_path)
 tokenizer.padding_side = "left"
 
 # load model from checkpoint
-model = JoLAModel.jola_from_pretrained(
+model = JoLAModel_llama.jola_from_pretrained(
     pretrained_model_name_or_path=checkpoint_path,
     cache_dir='.cache',
     torch_dtype=torch.float32,
